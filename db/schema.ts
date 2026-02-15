@@ -7,6 +7,7 @@ import {
   index,
   pgEnum,
 } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 
 export const projectTypeEnum = pgEnum("project_type", [
   "website",
@@ -97,18 +98,24 @@ export const verification = pgTable(
 export const project = pgTable(
   "project",
   {
-    id: text("id").primaryKey(),
-    name: text("name").notNull(), // Nombre del proyecto (ej: "Mi Portfolio")
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
+    name: text("name").notNull(),
     description: text("description"),
     type: projectTypeEnum("type").default("website").notNull(),
     url: text("url"), // URL opcional si es de tipo 'website'
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    shareLink: text("share_link").notNull().unique(), // El slug único para compartir
+    shareLink: text("share_link")
+      .notNull()
+      .unique()
+      .$defaultFn(() => nanoid()),
     isActive: boolean("is_active").default(true).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
+      .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
   },
@@ -121,7 +128,9 @@ export const project = pgTable(
 export const feedback = pgTable(
   "feedback",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
     projectId: text("project_id")
       .notNull()
       .references(() => project.id, { onDelete: "cascade" }),

@@ -5,7 +5,7 @@ export default function Page() {
     <main className="my-10">
       <div className="flex justify-between">
         <h1 className="text-5xl font-black font-heading">
-          Real FeedBack for your Web/Portfolio
+          Real FeedBack for Web/Portfolio
         </h1>
         <FeedBackLottie />
       </div>

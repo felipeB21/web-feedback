@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <header className="flex items-center justify-between border-b p-2 font-sans">
       <div className="flex items-center gap-5">
-        <Link href="/" className="text-2xl font-heading font-bold">
+        <Link href="/" className="text-xl font-heading font-bold">
           WebFeedBack
         </Link>
         <nav>

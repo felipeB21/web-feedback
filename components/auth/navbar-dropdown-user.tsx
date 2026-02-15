@@ -8,11 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
+import { CreditCard, Library, LogOut, SlidersHorizontal } from "lucide-react";
 
 type User = {
   name: string;
@@ -43,18 +44,31 @@ export function NavbarDropdownUser({ user }: { user: User }) {
       <DropdownMenuContent className="w-40" align="start">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuItem>
-            Dashboard
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <DropdownMenuItem
+            render={
+              <Link href={"/dashboard"}>
+                <Library />
+                Dashboard
+              </Link>
+            }
+          />
+
+          <DropdownMenuItem
+            render={
+              <Link href={"/dashboard/billing"}>
+                <CreditCard />
+                Billing
+              </Link>
+            }
+          />
+          <DropdownMenuItem
+            render={
+              <Link href={"/settings"}>
+                <SlidersHorizontal />
+                Settings
+              </Link>
+            }
+          />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -69,8 +83,8 @@ export function NavbarDropdownUser({ user }: { user: User }) {
               })
             }
           >
+            <LogOut />
             Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
