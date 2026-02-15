@@ -20,7 +20,7 @@ export function SignInModal() {
     <Dialog>
       <div>
         <DialogTrigger
-          render={<Button className={"bg-black font-bold"}>Get Started</Button>}
+          render={<Button className={"font-bold"}>Get Started</Button>}
         />
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>

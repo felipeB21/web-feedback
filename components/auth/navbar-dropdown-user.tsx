@@ -73,6 +73,7 @@ export function NavbarDropdownUser({ user }: { user: User }) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
+            className={"text-destructive"}
             onClick={async () =>
               await authClient.signOut({
                 fetchOptions: {

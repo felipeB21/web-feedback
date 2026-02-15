@@ -4,7 +4,7 @@ import PaperPlaneLottie from "../lottie/paperplane";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
-import { Card } from "../ui/card";
+import CardProject from "./card-project";
 
 export default async function Projects() {
   const { data: projects, error } = await api.project.get({
@@ -22,28 +22,21 @@ export default async function Projects() {
       {projects.length === 0 ? (
         <div className="flex flex-col items-center justify-center">
           <PaperPlaneLottie />
-          <h2 className="font-semibold">
+          <h2 className="font-semibold text-xl">
             You don&apos;t have any project feedback yet
           </h2>
           <Link href={"/dashboard/new-project"} className="mt-5">
             <Button>
-              <Plus />
+              <Plus className="mr-2 h-4 w-4" />
               Create your first project
             </Button>
           </Link>
         </div>
       ) : (
-        <ul className="space-y-4">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <li key={project.id}>
-              <Link href={`/dashboard/project/${project.id}`}>
-                <Card className="p-4 hover:bg-accent transition-colors">
-                  <h3 className="text-lg font-semibold">{project.name}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {project.description || "No description"}
-                  </p>
-                </Card>
-              </Link>
+              <CardProject project={project} />
             </li>
           ))}
         </ul>
