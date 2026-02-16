@@ -19,6 +19,7 @@ import {
 import { Button } from "../ui/button";
 import {
   Calendar,
+  Copy,
   EllipsisVertical,
   ExternalLink,
   Pencil,
@@ -26,12 +27,14 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { PROJECT_TYPES } from "@/utils/project-type";
+import { toast } from "sonner";
 
 type CardProjectProps = {
   project: {
     type: string;
     id: string;
     name: string;
+    shareLink: string;
     description?: string | null;
     url?: string | null;
     createdAt: Date;
@@ -43,6 +46,21 @@ export default function CardProject({ project }: CardProjectProps) {
   const typeConfig =
     PROJECT_TYPES[project.type as keyof typeof PROJECT_TYPES] ||
     PROJECT_TYPES.other;
+
+  const handleCopyLink = async () => {
+    const shareLink = `${window.location.origin}/feedback-send/${project.shareLink}`;
+
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      toast.success("Link copied to clipboard");
+    } catch (err) {
+      console.log(err);
+
+      toast.error("Error", {
+        description: "No se pudo copiar el enlace.",
+      });
+    }
+  };
 
   return (
     <Card className="relative">
@@ -76,7 +94,9 @@ export default function CardProject({ project }: CardProjectProps) {
                   </Link>
                 }
               />
-
+              <DropdownMenuItem onClick={handleCopyLink}>
+                <Copy className="mr-2 h-4 w-4" /> Copy Link
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Pencil className="mr-2 h-4 w-4" /> Edit
               </DropdownMenuItem>

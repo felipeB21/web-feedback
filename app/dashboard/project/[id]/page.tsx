@@ -1,4 +1,5 @@
 import NotFound from "@/app/not-found";
+import CopyLink from "@/components/dashboard/copy-link";
 import { api } from "@/lib/api";
 import { PROJECT_TYPES } from "@/utils/project-type";
 import { Eye, Send } from "lucide-react";
@@ -17,8 +18,6 @@ export default async function ProjectIDPage({
     },
   });
 
-  console.log(project);
-
   if (error) {
     return <NotFound />;
   }
@@ -33,14 +32,15 @@ export default async function ProjectIDPage({
 
   return (
     <div className="my-10 font-sans max-w-4xl mx-auto px-4">
-      <div className="flex items-end gap-8">
+      <div className="flex items-center gap-5">
         <h1 className="text-4xl font-bold font-heading mb-2">{project.name}</h1>
-
-        <div className="flex items-center gap-2 mb-4 px-3 py-1 bg-secondary w-fit rounded-full text-sm font-medium">
+        <div className="flex items-center gap-2 px-3 py-2 bg-secondary w-fit rounded-full text-sm font-medium">
           {typeConfig.icon}
           <span>{typeConfig.label}</span>
         </div>
+        <CopyLink shareLink={project.shareLink} />
       </div>
+
       <div className="font-medium text-muted-foreground text-sm flex items-center gap-10">
         <p className="flex items-center gap-1">
           <Eye className="w-4 h-4" /> Visits:{" "}
@@ -51,6 +51,7 @@ export default async function ProjectIDPage({
           <span className="text-black">{project.feedbacksCount}</span>
         </p>
       </div>
+
       <div className="my-10">
         {project.url && (
           <a
