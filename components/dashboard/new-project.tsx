@@ -17,6 +17,7 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 const projectSchema = z.object({
   name: z
@@ -48,6 +49,7 @@ const items = [
 ];
 
 export default function NewProject() {
+  const { push } = useRouter();
   const {
     register,
     handleSubmit,
@@ -72,7 +74,7 @@ export default function NewProject() {
         return;
       }
 
-      console.log("Created:", project);
+      push(`/dashboard/project/${project.id}`);
     } catch (err) {
       console.error(err);
     }

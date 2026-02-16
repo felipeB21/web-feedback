@@ -17,7 +17,13 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { EllipsisVertical, ExternalLink, Pencil, Trash2 } from "lucide-react";
+import {
+  Calendar,
+  EllipsisVertical,
+  ExternalLink,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 type CardProjectProps = {
@@ -79,10 +85,10 @@ export default function CardProject({ project }: CardProjectProps) {
           </CardDescription>
         )}
       </CardHeader>
-
       <CardContent />
 
       <CardFooter>
+        <Calendar className="w-3 h-3 mr-1 text-muted-foreground" />
         <p className="text-xs text-muted-foreground">
           Created{" "}
           {formatDistanceToNow(new Date(project.createdAt), {
