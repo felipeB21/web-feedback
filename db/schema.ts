@@ -142,6 +142,28 @@ export const feedback = pgTable(
   (table) => [index("feedback_projectId_idx").on(table.projectId)],
 );
 
+export const projectAnalytics = pgTable(
+  "project_analytics",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => project.id, { onDelete: "cascade" }),
+    // Hash anónimo del visitante para contar únicos sin guardar datos sensibles
+    visitorHash: text("visitor_hash"),
+    referrer: text("referrer"), // De dónde vienen (google, twitter, directo)
+    deviceType: text("device_type"), // desktop, mobile, etc.
+    country: text("country"), // Opcional (si usas Vercel headers o similar)
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("analytics_projectId_idx").on(table.projectId),
+    index("analytics_createdAt_idx").on(table.createdAt), // Útil para gráficas por fecha
+  ],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -154,6 +176,14 @@ export const projectRelations = relations(project, ({ one, many }) => ({
     references: [user.id],
   }),
   feedbacks: many(feedback),
+  analytics: many(projectAnalytics), // <-- Nueva relación
+}));
+
+export const analyticsRelations = relations(projectAnalytics, ({ one }) => ({
+  project: one(project, {
+    fields: [projectAnalytics.projectId],
+    references: [project.id],
+  }),
 }));
 
 export const feedbackRelations = relations(feedback, ({ one }) => ({

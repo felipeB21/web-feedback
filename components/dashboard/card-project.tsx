@@ -25,6 +25,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { PROJECT_TYPES } from "@/utils/project-type";
 
 type CardProjectProps = {
   project: {
@@ -39,6 +40,10 @@ type CardProjectProps = {
 };
 
 export default function CardProject({ project }: CardProjectProps) {
+  const typeConfig =
+    PROJECT_TYPES[project.type as keyof typeof PROJECT_TYPES] ||
+    PROJECT_TYPES.other;
+
   return (
     <Card className="relative">
       <CardHeader>
@@ -47,7 +52,10 @@ export default function CardProject({ project }: CardProjectProps) {
             <CardTitle className="font-heading hover:underline underline-offset-4 cursor-pointer">
               {project.name}
             </CardTitle>
-            <p className="text-xs">{project.type}</p>
+            <div className="flex items-center gap-2 text-xs font-medium">
+              {typeConfig.icon}
+              <span>{typeConfig.label}</span>
+            </div>
           </Link>
 
           <DropdownMenu>

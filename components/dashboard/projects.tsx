@@ -7,7 +7,7 @@ import { Plus } from "lucide-react";
 import CardProject from "./card-project";
 
 export default async function Projects() {
-  const { data: projects, error } = await api.project.get({
+  const { data: projects, error } = await api.protected.project.get({
     headers: {
       cookie: (await cookies()).toString(),
     },

@@ -67,7 +67,7 @@ export default function NewProject() {
 
   const onSubmit: SubmitHandler<ProjectFormValues> = async (data) => {
     try {
-      const { data: project, error } = await api.project.post(data);
+      const { data: project, error } = await api.protected.project.post(data);
 
       if (error) {
         console.error(error);
