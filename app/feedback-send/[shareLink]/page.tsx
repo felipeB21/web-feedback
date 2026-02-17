@@ -1,4 +1,5 @@
 import NotFound from "@/app/not-found";
+import LockedLottie from "@/components/lottie/locked";
 import NewFeedback from "@/components/new-feedback";
 import { api } from "@/lib/api";
 import { session } from "@/lib/server";
@@ -14,7 +15,14 @@ export default async function FeedBackSend({
   const { data, error } = await api.public.feedback({ shareLink }).get();
 
   if (user?.user.id === data?.userId) {
-    return <strong>You can&apos;t send yourself a FeedBack</strong>;
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <strong className="font-heading">
+          You can&apos;t send yourself a FeedBack.
+        </strong>
+        <LockedLottie />
+      </div>
+    );
   }
 
   if (!data || error) {
