@@ -31,7 +31,7 @@ export default async function ProjectIDPage({
     PROJECT_TYPES.other;
 
   return (
-    <div className="my-10 font-sans max-w-4xl mx-auto px-4">
+    <div className="my-10 font-sans">
       <div className="flex items-center gap-5">
         <h1 className="text-4xl font-bold font-heading mb-2">{project.name}</h1>
         <div className="flex items-center gap-2 px-3 py-2 bg-secondary w-fit rounded-full text-sm font-medium">

@@ -95,7 +95,7 @@ export default function CardProject({ project }: CardProjectProps) {
                 }
               />
               <DropdownMenuItem onClick={handleCopyLink}>
-                <Copy className="mr-2 h-4 w-4" /> Copy Link
+                <Copy className="mr-2 h-4 w-4" /> Copy Share Link
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Pencil className="mr-2 h-4 w-4" /> Edit

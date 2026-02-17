@@ -15,8 +15,7 @@ import { Send } from "lucide-react";
 
 export default function NewFeedback() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-10 font-sans">
-      <h1 className="text-4xl">WebFeedBack</h1>
+    <div className="flex flex-col items-center justify-center font-sans">
       <form>
         <div className="flex items-center gap-5">
           <div className="w-full">

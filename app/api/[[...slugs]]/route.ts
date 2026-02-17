@@ -11,6 +11,7 @@ const ProjectModel = t.Object({
   url: t.Nullable(t.String()),
   type: t.String(),
   shareLink: t.String(),
+  userId: t.String(),
   createdAt: t.Date(),
   updatedAt: t.Date(),
 });
@@ -26,40 +27,66 @@ const ProjectWithStatsModel = t.Composite([
 
 const app = new Elysia({ prefix: "/api" })
   .group("/public", (app) =>
-    app.post(
-      "/track/:shareLink",
-      async ({ params, request, headers }) => {
-        const { shareLink } = params;
+    app
+      .post(
+        "/track/:shareLink",
+        async ({ params, request, headers }) => {
+          const { shareLink } = params;
 
-        const targetProject = await db.query.project.findFirst({
-          where: eq(project.shareLink, shareLink),
-          columns: { id: true },
-        });
+          const targetProject = await db.query.project.findFirst({
+            where: eq(project.shareLink, shareLink),
+            columns: { id: true },
+          });
 
-        if (!targetProject) {
-          return { status: "error", message: "Project not found" };
-        }
+          if (!targetProject) {
+            return { status: "error", message: "Project not found" };
+          }
 
-        const userAgent = headers["user-agent"] || "unknown";
-        const referrer = headers["referer"] || "direct";
-        const ip = headers["x-forwarded-for"] || "unknown";
+          const userAgent = headers["user-agent"] || "unknown";
+          const referrer = headers["referer"] || "direct";
+          const ip = headers["x-forwarded-for"] || "unknown";
 
-        const visitorHash = Bun.hash(ip + userAgent).toString();
-        const isMobile = /mobile/i.test(userAgent) ? "mobile" : "desktop";
+          const visitorHash = Bun.hash(ip + userAgent).toString();
+          const isMobile = /mobile/i.test(userAgent) ? "mobile" : "desktop";
 
-        await db.insert(projectAnalytics).values({
-          projectId: targetProject.id,
-          visitorHash,
-          referrer,
-          deviceType: isMobile,
-        });
+          await db.insert(projectAnalytics).values({
+            projectId: targetProject.id,
+            visitorHash,
+            referrer,
+            deviceType: isMobile,
+          });
 
-        return { status: "success" };
-      },
-      {
-        params: t.Object({ shareLink: t.String() }),
-      },
-    ),
+          return { status: "success" };
+        },
+        {
+          params: t.Object({ shareLink: t.String() }),
+        },
+      )
+      .get(
+        "/feedback/:shareLink",
+        async ({ params, set }) => {
+          const { shareLink } = params;
+
+          const existingProject = await db.query.project.findFirst({
+            where: eq(project.shareLink, shareLink),
+          });
+
+          if (!existingProject) {
+            set.status = 404;
+            return "Project not found";
+          }
+
+          return existingProject;
+        },
+        {
+          params: t.Object({ shareLink: t.String() }),
+          response: {
+            200: ProjectModel,
+            404: t.String(),
+            401: t.String(),
+          },
+        },
+      ),
   )
   .group("/protected", (app) =>
     app
@@ -83,6 +110,7 @@ const app = new Elysia({ prefix: "/api" })
               description: project.description,
               url: project.url,
               type: project.type,
+              userId: project.userId,
               shareLink: project.shareLink,
               createdAt: project.createdAt,
               updatedAt: project.updatedAt,

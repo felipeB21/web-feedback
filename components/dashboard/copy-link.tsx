@@ -60,7 +60,7 @@ export default function CopyLink({ shareLink }: { shareLink: string }) {
             className="flex items-center gap-2"
           >
             <Copy className="h-4 w-4" />
-            <span>Copy Link</span>
+            <span>Copy Share Link</span>
           </motion.div>
         )}
       </AnimatePresence>
